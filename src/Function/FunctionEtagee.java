@@ -29,9 +29,15 @@ public class FunctionEtagee extends DefaultFunction{
 	}
 
 	@Override
-	public double f(double x) throws Exception {
-		
-		return 0;
+	public double f(double x) throws Exception {		
+		return valeurs[xBelongsToMeshI(x)];
 	}
-
+	
+	public int xBelongsToMeshI(double x){
+		int i=0;
+		while(i < mailleur.getN() && x > mailleur.getElementi(i)){
+			++i;
+		}
+		return i;
+	}
 }

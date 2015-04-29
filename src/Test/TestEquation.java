@@ -2,40 +2,46 @@ package Test;
 
 import EquaDiff.DirichletEquaDiff;
 import Function.FunctionConstante;
+import Function.FunctionEtagee;
+import Function.FunctionPolynomiale;
 import Interfaces.IMailleur;
 import Mailleur.MailleurLagrange;
-import Matrices.MatriceEquaDiff2ndDegre;
-import Matrices.MatriceEquaDiff2ndDegreEchelonnee;
-import Matrices.MatriceEquaDiff2ndEchelonneeMod;
+import Matrices.MatriceDF1;
+import Matrices.MatriceEchelonnee;
+import Matrices.MatriceVF1;
 
 public class TestEquation {
 	public static void main(String args[]){
 		
 		DirichletEquaDiff e = new DirichletEquaDiff();
-		/*
-		e.setA(new FunctionConstante(-1.0));
-		e.setB(new FunctionConstante(0.0));
-		e.setC(new FunctionConstante(0.0));
-		*/
-		e.setF(new FunctionConstante(0.0));
-		IMailleur mailleur = new MailleurLagrange(10);
 		
+		
+		IMailleur mailleur = new MailleurLagrange(32);
+		//e.setF(new FunctionConstante(-2.0));
 		/*
-		for(int i=0; i<=10; i++){
-			System.out.println(mailleur.getElementi(i));
-		}
-		*/
+		double val[] = {-1.2, -2.4, -3.6, -4.8}; 
+		e.setF(new FunctionEtagee(mailleur, val));
+		//*/
+		//*
+		e.setF(new FunctionPolynomiale("-12x^2"));
+		//*/
 		
 		e.setMailleur(mailleur);
 		e.setU0(0.0);
 		e.setU1(1.0);
+		System.out.println("Différences finies");
+		e.resoudreAvecDF();
+		System.out.println("\nVolumes finies");
+		e.resoudreAvecVF();
 		
-		e.resoudre();
-		
-		//System.out.println("hello");
-		MatriceEquaDiff2ndDegre mat = new MatriceEquaDiff2ndDegre(e);
-		MatriceEquaDiff2ndDegreEchelonnee mat1 = new MatriceEquaDiff2ndDegreEchelonnee(mat);
-		//MatriceEquaDiff2ndEchelonneeMod mat1 = new MatriceEquaDiff2ndEchelonneeMod(mat);
-		mat1.printMatrice();
+		MatriceDF1 matDF = new MatriceDF1(e);
+		MatriceVF1 matVF = new MatriceVF1(e);
+		MatriceEchelonnee mat1 = new MatriceEchelonnee(matVF);
+		/*
+		System.out.println("\nDifférences finies");
+		matDF.printMatrice();
+		System.out.println("\nVolumes finies");
+		matVF.printMatrice();
+		*/
 	}
 }

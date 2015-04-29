@@ -4,11 +4,11 @@ import java.io.FileNotFoundException;
 
 import Interfaces.IEquaDiff;
 
-public class MatriceEquaDiff2ndDegre extends DefaultMatrice{
+public class MatriceDF1 extends DefaultMatrice{
 
 	private IEquaDiff equation; 
 	
-	public MatriceEquaDiff2ndDegre(IEquaDiff equadiff){
+	public MatriceDF1(IEquaDiff equadiff){
 		setEquation(equadiff);
 		setNombreDeLignes(equadiff.getN() - 1);
 		setNombreDeColonnes(equadiff.getN());
@@ -38,13 +38,9 @@ public class MatriceEquaDiff2ndDegre extends DefaultMatrice{
 		else if(i == j+1 && j != getNombreDeColonnes() - 1){
 			return unSurH * (aSurH - bSur2);
 		}
-		/*
-		else{
-			return 0.0;
-		}
-		*/
+		
 		else if(j == getNombreDeColonnes() - 1){
-			double fi = equation.getF().f(equation.getElementi(i)); 
+			double fi = equation.getF().f(equation.getElementi(i+1)); 
 			if(i==0){
 				return  fi - (unSurH * (aSurH + bSur2)) * equation.getU0();
 			}

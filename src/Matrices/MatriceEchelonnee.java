@@ -3,13 +3,22 @@ package Matrices;
 import java.io.FileNotFoundException;
 
 import Interfaces.IEquaDiff;
+import Interfaces.IMatrice;
 
-public class MatriceEquaDiff2ndDegreEchelonnee extends DefaultMatrice{
+public class MatriceEchelonnee extends DefaultMatrice{
 	
-	MatriceEquaDiff2ndDegre mat;
+	IMatrice mat;
 	double[] tab;
 
-	public MatriceEquaDiff2ndDegreEchelonnee(MatriceEquaDiff2ndDegre mat){
+	public MatriceEchelonnee(MatriceDF1 mat){
+		
+		this.mat = mat;
+		setNombreDeLignes(mat.getNombreDeLignes());
+		setNombreDeColonnes(mat.getNombreDeColonnes());
+		tab = new double[getNombreDeLignes()];
+	}
+	
+	public MatriceEchelonnee(MatriceVF1 mat){
 		
 		this.mat = mat;
 		setNombreDeLignes(mat.getNombreDeLignes());
@@ -18,29 +27,30 @@ public class MatriceEquaDiff2ndDegreEchelonnee extends DefaultMatrice{
 	}
 
 	public double get(int i, int j) throws Exception {
-		if(i == j-1 && j != getNombreDeColonnes() - 1){
-			if(i == 0)
-				 return mat.get(i, i+1);
+		if(j != getNombreDeColonnes() - 1){
+			if(i == j-1){
+				if(i == 0)
+					 return mat.get(i, i+1);
+				else{
+					// On retourne a(i-1) * Li
+					return mat.get(i, i+1); //* get(i-1, j-2)/get(i, j-2);
+				} 
+			}
+			
+			else if(i == j){
+				if(i == 0)
+					return mat.get(i, i);
+				else{
+					// On retourne  Li - (ai/a(i-1)) * L(i-1)
+					return mat.get(i, i)  - (mat.get(i, i-1)/get(i-1, i-1)) * mat.get(i, i-1);
+				}
+			}
 			else{
-				// On retourne a(i-1) * Li
-				return mat.get(i, i+1); //* get(i-1, j-2)/get(i, j-2);
-			} 
-		}
-		
-		else if(i == j && j != getNombreDeColonnes() - 1 ){
-			if(i == 0)
-				return mat.get(i, i);
-			else{
-				// On retourne  Li - (ai/a(i-1)) * L(i-1)
-				return mat.get(i, i)  - (mat.get(i, i-1)/get(i-1, i-1)) * mat.get(i, i-1);
+				return 0.0;
 			}
 		}
 		
-		else if(i == j+1 && j != getNombreDeColonnes() - 1){
-			return 0.0;
-		}
-		
-		else if(j == getNombreDeColonnes() - 1){
+		else{
 			
 			if(i==0){
 				return mat.get(i, j);
@@ -52,19 +62,15 @@ public class MatriceEquaDiff2ndDegreEchelonnee extends DefaultMatrice{
 				return mat.get(i, j) - get(i-1, j) * (mat.get(i, i-1) / get(i-1, i-1));
 			}
 		}
-		else{
-			return 0.0;
-		}
 	}
 	
-	public void remontee() throws Exception{
+	public double[] remontee() throws Exception{
 		
 		double ui = get(getNombreDeLignes() - 1, getNombreDeColonnes()-1)/get(getNombreDeLignes() - 1, getNombreDeColonnes()-2);
-		//tab[9] = ui;
-		//System.out.println(getNombreDeLignes());
-		for(int i=getNombreDeLignes() - 1; i>=0; --i){
-			
-			
+		
+		System.out.println(getNombreDeLignes() + " : " + ui);
+		tab[getNombreDeLignes() - 1] = ui;
+		for(int i=getNombreDeLignes() - 2; i>=0; --i){
 			
 			double fi = get(i, getNombreDeColonnes() - 1);
 			double ai = get(i, i);
@@ -73,6 +79,7 @@ public class MatriceEquaDiff2ndDegreEchelonnee extends DefaultMatrice{
 			tab[i] = ui;
 			System.out.println( i+1 + " : " + ui);
 		}
+		return tab;
 	}
 	
 	@Override
@@ -82,8 +89,6 @@ public class MatriceEquaDiff2ndDegreEchelonnee extends DefaultMatrice{
 
 	@Override
 	public void printMatrice() {
-		// TODO Auto-generated method stub
-		//System.out.println(getNombreDeLignes() + " " + getNombreDeColonnes());
 		for(int i=0; i < getNombreDeLignes(); ++i){
 			for(int j=0; j <getNombreDeColonnes(); j++){
 				try {
@@ -97,3 +102,4 @@ public class MatriceEquaDiff2ndDegreEchelonnee extends DefaultMatrice{
 		}
 	}
 }
+

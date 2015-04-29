@@ -147,7 +147,7 @@ public class MatriceCRS extends DefaultMatrice {
 
 	@Override
 	public void resolve(String file, String resolveType) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 }

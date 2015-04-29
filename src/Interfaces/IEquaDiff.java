@@ -11,6 +11,7 @@ public interface IEquaDiff {
 	public int getN();
 	public double getU0();
 	public double getU1();
-	public IFunction resoudre();
+	public IFunction resoudreAvecDF();
+	public IFunction resoudreAvecVF();
 	public void construireMatrice();
 }
